@@ -1,0 +1,90 @@
+.how-it-works-section {
+  padding: 60px 0;
+  background-color: #fff; /* Fondo blanco para consistencia */
+}
+
+.how-it-works-section .container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 15px;
+  text-align: center;
+}
+
+.how-it-works-section h2 {
+  font-size: 2.5rem;
+  margin-bottom: 60px; /* Más espacio para el título */
+}
+
+.how-it-works-section .steps {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  position: relative; /* Necesario para la línea de conexión */
+}
+
+/* Línea de conexión */
+.how-it-works-section .steps::before {
+  content: '';
+  position: absolute;
+  top: 40px; /* Ajustar verticalmente al centro de los iconos */
+  left: 10%;
+  right: 10%;
+  height: 2px;
+  background-color: #007bff;
+  z-index: 0;
+}
+
+.how-it-works-section .step {
+  flex: 1;
+  padding: 20px;
+  border-radius: 8px;
+  background-color: #fff; /* Fondo blanco para que el icono resalte */
+  position: relative; /* Para que el step esté sobre la línea */
+  z-index: 1;
+}
+
+.how-it-works-section .step-icon {
+  font-size: 3rem; /* Iconos más grandes */
+  color: #007bff;
+  margin: 0 auto 20px;
+  width: 80px; /* Círculo contenedor */
+  height: 80px;
+  line-height: 80px;
+  border-radius: 50%;
+  background-color: #fff; /* Fondo blanco para el círculo */
+  border: 2px solid #007bff; /* Borde del color primario */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.how-it-works-section .step h3 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+.how-it-works-section .step p {
+  font-size: 1rem;
+  color: #666;
+}
+
+@media screen and (max-width: 768px) {
+  .how-it-works-section h2 {
+    font-size: 2rem;
+  }
+
+  .how-it-works-section .steps {
+    flex-direction: column;
+    gap: 30px;
+  }
+
+  /* Ocultar la línea en vista móvil */
+  .how-it-works-section .steps::before {
+    display: none;
+  }
+
+  .how-it-works-section .step {
+    background-color: #f9f9f9; /* Restaurar un fondo ligero en móvil */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+}

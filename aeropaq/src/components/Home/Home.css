@@ -1,0 +1,35 @@
+.home-section {
+  background-color: #f4f4f4;
+  padding: 100px 0;
+  text-align: center;
+}
+
+.home-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.home-container h1 {
+  font-size: 3rem;
+  margin-bottom: 20px;
+}
+
+.home-container p {
+  font-size: 1.2rem;
+  color: #666;
+}
+
+@media screen and (max-width: 768px) {
+  .home-section {
+    padding: 60px 0;
+  }
+
+  .home-container h1 {
+    font-size: 2rem;
+  }
+
+  .home-container p {
+    font-size: 1rem;
+  }
+}
