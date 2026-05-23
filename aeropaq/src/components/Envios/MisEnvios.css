@@ -19,6 +19,21 @@ h2 {
   color: #333;
 }
 
+.tipo-envio-selector {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-bottom: 1.5rem;
+  font-size: 1.1rem;
+}
+
+.tipo-envio-selector label {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 .envio-form {
   display: flex;
   flex-direction: column;
@@ -30,12 +45,27 @@ h2 {
   gap: 1rem;
 }
 
-.form-row input {
+.form-row input, .form-row .costo-display {
   width: 100%;
 }
 
+.costo-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #e9ecef;
+  padding: 0.8rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  color: #495057;
+}
+
+.costo-display strong {
+  margin-left: 0.5rem;
+  font-size: 1.1rem;
+}
+
 .envio-form input, .envio-form textarea {
-  width: 100%;
   padding: 0.8rem;
   border: 1px solid #ccc;
   border-radius: 4px;

@@ -21,6 +21,8 @@ app.use('/api/usuarios', require('./routes/usuarios'));
 app.use('/api/envios', require('./routes/envios'));
 app.use('/api/admin', require('./routes/admin'));
 app.use('/api/estados-envio', require('./routes/estados'));
+app.use('/api/roles', require('./routes/roles'));
+app.use('/api/destinos-internacionales', require('./routes/destinos'));
 
 
 const PORT = process.env.PORT || 3001;
