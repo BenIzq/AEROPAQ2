@@ -1,62 +1,83 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { Link } from 'react-router-dom';
+import AuthContext from '../../context/AuthContext';
 import './Navbar.css';
 
 const Navbar = () => {
+  const { user, logout } = useContext(AuthContext);
   const [click, setClick] = useState(false);
 
   const handleClick = () => setClick(!click);
   const closeMobileMenu = () => setClick(false);
 
+  const handleLogout = () => {
+    logout();
+    closeMobileMenu();
+  };
+
   return (
     <nav className="navbar">
       <div className="navbar-container">
-        <a href="#home" className="navbar-logo" onClick={closeMobileMenu}>
+        <Link to="/" className="navbar-logo" onClick={closeMobileMenu}>
           SkyShip
-        </a>
+        </Link>
         <div className="menu-icon" onClick={handleClick}>
           <i className={click ? 'fas fa-times' : 'fas fa-bars'} />
         </div>
         <ul className={click ? 'nav-menu active' : 'nav-menu'}>
           <li className="nav-item">
-            <a href="#home" className="nav-links" onClick={closeMobileMenu}>
+            <Link to="/" className="nav-links" onClick={closeMobileMenu}>
               Inicio
-            </a>
+            </Link>
           </li>
           <li className="nav-item">
-            <a href="#services" className="nav-links" onClick={closeMobileMenu}>
+            <Link to="/servicios" className="nav-links" onClick={closeMobileMenu}>
               Servicios
-            </a>
+            </Link>
           </li>
           <li className="nav-item">
-            <a href="#coverage" className="nav-links" onClick={closeMobileMenu}>
-              Cobertura
-            </a>
-          </li>
-          <li className="nav-item">
-            <a href="#how-it-works" className="nav-links" onClick={closeMobileMenu}>
-              Cómo Funciona
-            </a>
-          </li>
-          <li className="nav-item">
-            <a href="#about-us" className="nav-links" onClick={closeMobileMenu}>
-              Acerca de
-            </a>
-          </li>
-          <li className="nav-item">
-            <a href="#faq" className="nav-links" onClick={closeMobileMenu}>
-              Preguntas Frecuentes
-            </a>
-          </li>
-          <li className="nav-item">
-            <a href="#contact" className="nav-links" onClick={closeMobileMenu}>
+            <Link to="/contacto" className="nav-links" onClick={closeMobileMenu}>
               Contacto
-            </a>
+            </Link>
           </li>
-          <li className="nav-item">
-            <a href="#cotizador" className="nav-links" onClick={closeMobileMenu}>
-              Cotizador
-            </a>
-          </li>
+
+          {user ? (
+            <>
+              <li className="nav-item">
+                <Link to="/mis-envios" className="nav-links" onClick={closeMobileMenu}>
+                  Mis Envíos
+                </Link>
+              </li>
+              {user.rol === 'ADMIN' && (
+                <li className="nav-item">
+                  <Link to="/admin" className="nav-links" onClick={closeMobileMenu}>
+                    Panel Admin
+                  </Link>
+                </li>
+              )}
+              <li className="nav-item">
+                <span className="nav-links-user">Hola, {user.nombre.split(' ')[0]}</span>
+              </li>
+              <li className="nav-item">
+                <button className="nav-links-btn logout" onClick={handleLogout}>
+                  Cerrar Sesión
+                </button>
+              </li>
+            </>
+          ) : (
+            <>
+              <li className="nav-item">
+                <Link to="/login" className="nav-links-btn" onClick={closeMobileMenu}>
+                  Iniciar Sesión
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link to="/registro" className="nav-links-btn" onClick={closeMobileMenu}>
+                  Registrarse
+                </Link>
+              </li>
+            </>
+          )}
         </ul>
       </div>
     </nav>
