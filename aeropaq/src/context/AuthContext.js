@@ -20,7 +20,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (correo, password) => {
     try {
-      const response = await axios.post('/api/usuarios/login', { correo, password });
+      const response = await axios.post('http://skyship-env.eba-hpyjyiyw.us-east-2.elasticbeanstalk.com/api/usuarios/login', { correo, password });
       const { token, usuario } = response.data;
       
       localStorage.setItem('token', token);
@@ -43,7 +43,7 @@ export const AuthProvider = ({ children }) => {
 
   const register = async (userData) => {
     try {
-      await axios.post('/api/usuarios/registro', userData);
+      await axios.post('http://skyship-env.eba-hpyjyiyw.us-east-2.elasticbeanstalk.com/api/usuarios/registro', userData);
       navigate('/login'); // Redirige a login después de un registro exitoso
     } catch (error) {
       console.error('Error en el registro:', error);

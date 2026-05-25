@@ -25,8 +25,8 @@ const MisEnvios = () => {
       try {
         setLoading(true);
         const [enviosRes, destinosRes] = await Promise.all([
-          api.get('/envios'),
-          api.get('/destinos-internacionales')
+          api.get('http://skyship-env.eba-hpyjyiyw.us-east-2.elasticbeanstalk.com/envios'),
+          api.get('http://skyship-env.eba-hpyjyiyw.us-east-2.elasticbeanstalk.com/destinos-internacionales')
         ]);
         setEnvios(enviosRes.data);
         setDestinosInt(destinosRes.data);
@@ -80,10 +80,10 @@ const MisEnvios = () => {
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
-      await api.post('/envios', formData);
+      await api.post('http://skyship-env.eba-hpyjyiyw.us-east-2.elasticbeanstalk.com/envios', formData);
       resetForm();
       // Recargar la lista de envíos
-      const res = await api.get('/envios');
+      const res = await api.get('http://skyship-env.eba-hpyjyiyw.us-east-2.elasticbeanstalk.com/envios');
       setEnvios(res.data);
     } catch (err) {
       setError('Error al crear el envío. Verifique los datos.');
