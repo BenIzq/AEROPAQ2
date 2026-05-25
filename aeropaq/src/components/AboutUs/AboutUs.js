@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './AboutUs.css';
+import api from '../../api';
 
 const AboutUs = () => {
   const [info, setInfo] = useState({
@@ -14,12 +15,8 @@ const AboutUs = () => {
   useEffect(() => {
     const fetchInfo = async () => {
       try {
-        const response = await fetch('/api/informacion-empresa');
-        if (!response.ok) {
-          throw new Error('No se pudo obtener la información de la empresa.');
-        }
-        const data = await response.json();
-        setInfo(data);
+        const response = await api.get('/informacion-empresa');
+        setInfo(response.data);
       } catch (err) {
         setError(err.message);
       } finally {

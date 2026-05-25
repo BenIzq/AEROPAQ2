@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './FAQ.css';
+import api from '../../api';
 
 const FAQ = () => {
   const [activeIndex, setActiveIndex] = useState(null);
@@ -10,12 +11,8 @@ const FAQ = () => {
   useEffect(() => {
     const fetchFaqs = async () => {
       try {
-        const response = await fetch('/api/faqs');
-        if (!response.ok) {
-          throw new Error('No se pudo obtener la información de las preguntas frecuentes.');
-        }
-        const data = await response.json();
-        setFaqs(data);
+        const response = await api.get('/faqs');
+        setFaqs(response.data);
       } catch (err) {
         setError(err.message);
       } finally {

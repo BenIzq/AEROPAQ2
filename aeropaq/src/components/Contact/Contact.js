@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './Contact.css';
+import api from '../../api';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -49,31 +50,19 @@ const Contact = () => {
       setSubmitMessage('');
 
       try {
-        const response = await fetch('/api/contactos', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(formData)
+        await api.post('/contactos', formData);
+        setSubmitMessage('¡Gracias por tu mensaje! Lo hemos recibido correctamente.');
+        setFormData({
+          nombre: '',
+          correo: '',
+          telefono: '',
+          asunto: '',
+          mensaje: ''
         });
-
-        const result = await response.json();
-
-        if (response.ok) {
-          setSubmitMessage('¡Gracias por tu mensaje! Lo hemos recibido correctamente.');
-          setFormData({
-            nombre: '',
-            correo: '',
-            telefono: '',
-            asunto: '',
-            mensaje: ''
-          });
-        } else {
-          setSubmitMessage(result.msg || 'Hubo un problema al enviar tu mensaje. Inténtalo de nuevo.');
-        }
       } catch (error) {
         console.error('Error al enviar el formulario:', error);
-        setSubmitMessage('Hubo un problema al conectar con el servidor. Inténtalo de nuevo más tarde.');
+        const message = error.response?.data?.msg || 'Hubo un problema al enviar tu mensaje. Inténtalo de nuevo.';
+        setSubmitMessage(message);
       } finally {
         setIsSubmitting(false);
       }

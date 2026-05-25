@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './Services.css';
+import api from '../../api';
 
 const Services = () => {
   const [services, setServices] = useState([]);
@@ -11,12 +12,8 @@ const Services = () => {
   useEffect(() => {
     const fetchServices = async () => {
       try {
-        const response = await fetch('/api/servicios');
-        if (!response.ok) {
-          throw new Error('No se pudo obtener la información de los servicios.');
-        }
-        const data = await response.json();
-        setServices(data);
+        const response = await api.get('/servicios');
+        setServices(response.data);
       } catch (err) {
         setError(err.message);
       } finally {
