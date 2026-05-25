@@ -66,16 +66,17 @@ const Navbar = () => {
             </>
           ) : (
             <>
-              <li className="nav-item">
-                <Link to="/login" className="nav-links-btn" onClick={closeMobileMenu}>
-                  Iniciar Sesión
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link to="/registro" className="nav-links-btn" onClick={closeMobileMenu}>
-                  Registrarse
-                </Link>
-              </li>
+<li className="nav-item">
+  <Link to="/login" className="nav-links" onClick={closeMobileMenu}>
+    Iniciar Sesión
+  </Link>
+</li>
+
+<li className="nav-item">
+  <Link to="/registro" className="nav-links" onClick={closeMobileMenu}>
+    Registrarse
+  </Link>
+</li>
             </>
           )}
         </ul>

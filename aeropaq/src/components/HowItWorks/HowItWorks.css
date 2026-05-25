@@ -1,90 +1,319 @@
+
+
 .how-it-works-section {
-  padding: 60px 0;
-  background-color: #fff; /* Fondo blanco para consistencia */
+  position: relative;
+  overflow: hidden;
+
+  padding: 120px 20px;
+
+background: transparent;
 }
 
+
+
+
+
 .how-it-works-section .container {
-  max-width: 960px;
-  margin: 0 auto;
-  padding: 0 15px;
+  position: relative;
+  z-index: 2;
+
+  max-width: 1300px;
+
+  margin: auto;
+
+  padding: 0 20px;
+
   text-align: center;
 }
 
+
 .how-it-works-section h2 {
-  font-size: 2.5rem;
-  margin-bottom: 60px; /* Más espacio para el título */
+  font-size: 4rem;
+
+  font-weight: 800;
+
+  margin-bottom: 90px;
+
+  background: linear-gradient(
+    to right,
+    #ffffff,
+    #93c5fd,
+    #60a5fa
+  );
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  letter-spacing: -2px;
 }
+
+.how-it-works-section h2::after {
+  content: "";
+
+  width: 120px;
+  height: 5px;
+
+  background: linear-gradient(
+    to right,
+    #3b82f6,
+    #0ea5e9
+  );
+
+  display: block;
+
+  margin: 20px auto 0;
+
+  border-radius: 20px;
+
+  box-shadow:
+    0 0 25px rgba(59,130,246,0.5);
+}
+
+
 
 .how-it-works-section .steps {
+  position: relative;
+
   display: flex;
+
   justify-content: space-between;
-  gap: 20px;
-  position: relative; /* Necesario para la línea de conexión */
+
+  gap: 30px;
 }
 
-/* Línea de conexión */
 .how-it-works-section .steps::before {
-  content: '';
+  content: "";
+
   position: absolute;
-  top: 40px; /* Ajustar verticalmente al centro de los iconos */
-  left: 10%;
-  right: 10%;
-  height: 2px;
-  background-color: #007bff;
+
+  top: 50px;
+
+  left: 12%;
+  right: 12%;
+
+  height: 3px;
+
+  background: linear-gradient(
+    to right,
+    rgba(59,130,246,0.3),
+    rgba(96,165,250,0.9),
+    rgba(14,165,233,0.3)
+  );
+
+  border-radius: 999px;
+
+  box-shadow:
+    0 0 20px rgba(59,130,246,0.45);
+
   z-index: 0;
 }
 
+
+
 .how-it-works-section .step {
+  position: relative;
+  z-index: 2;
+
   flex: 1;
-  padding: 20px;
-  border-radius: 8px;
-  background-color: #fff; /* Fondo blanco para que el icono resalte */
-  position: relative; /* Para que el step esté sobre la línea */
-  z-index: 1;
+
+  padding: 40px 30px;
+
+  border-radius: 30px;
+
+  background: rgba(255,255,255,0.05);
+
+  border: 1px solid rgba(255,255,255,0.08);
+
+  backdrop-filter: blur(18px);
+
+  box-shadow:
+    0 20px 50px rgba(0,0,0,0.35);
+
+  overflow: hidden;
+
+  transition:
+    transform 0.4s ease,
+    box-shadow 0.4s ease,
+    border 0.4s ease;
 }
 
+/* glow overlay */
+.how-it-works-section .step::before {
+  content: "";
+
+  position: absolute;
+
+  inset: 0;
+
+  background:
+    radial-gradient(circle at top right,
+    rgba(59,130,246,0.15),
+    transparent 40%);
+
+  opacity: 0;
+
+  transition: 0.35s ease;
+}
+
+.how-it-works-section .step::after {
+  content: "";
+
+  position: absolute;
+
+  top: 0;
+  left: -100%;
+
+  width: 100%;
+  height: 2px;
+
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(96,165,250,0.9),
+    transparent
+  );
+
+  transition: 0.7s ease;
+}
+
+.how-it-works-section .step:hover {
+  transform:
+    translateY(-12px)
+    scale(1.02);
+
+  border: 1px solid rgba(59,130,246,0.35);
+
+  box-shadow:
+    0 30px 70px rgba(37,99,235,0.25),
+    0 10px 25px rgba(0,0,0,0.35);
+}
+
+.how-it-works-section .step:hover::before {
+  opacity: 1;
+}
+
+.how-it-works-section .step:hover::after {
+  left: 100%;
+}
+
+
+
 .how-it-works-section .step-icon {
-  font-size: 3rem; /* Iconos más grandes */
-  color: #007bff;
-  margin: 0 auto 20px;
-  width: 80px; /* Círculo contenedor */
-  height: 80px;
-  line-height: 80px;
+  position: relative;
+  z-index: 2;
+
+  width: 100px;
+  height: 100px;
+
+  margin: 0 auto 28px;
+
   border-radius: 50%;
-  background-color: #fff; /* Fondo blanco para el círculo */
-  border: 2px solid #007bff; /* Borde del color primario */
+
   display: flex;
   align-items: center;
   justify-content: center;
+
+  font-size: 3rem;
+
+  color: #60a5fa;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(37,99,235,0.2),
+      rgba(14,165,233,0.12)
+    );
+
+  border: 1px solid rgba(96,165,250,0.25);
+
+  box-shadow:
+    0 0 30px rgba(59,130,246,0.25),
+    inset 0 0 20px rgba(255,255,255,0.03);
+
+  transition:
+    transform 0.35s ease,
+    box-shadow 0.35s ease;
 }
+
+
+.how-it-works-section .step:hover .step-icon {
+  transform: scale(1.08);
+
+  box-shadow:
+    0 0 40px rgba(59,130,246,0.45);
+}
+
+
 
 .how-it-works-section .step h3 {
-  font-size: 1.5rem;
-  margin-bottom: 10px;
+  position: relative;
+  z-index: 2;
+
+  font-size: 1.6rem;
+
+  font-weight: 700;
+
+  margin-bottom: 18px;
+
+  color: white;
 }
+
+
 
 .how-it-works-section .step p {
+  position: relative;
+  z-index: 2;
+
   font-size: 1rem;
-  color: #666;
+
+  line-height: 1.9;
+
+  color: rgba(255,255,255,0.72);
 }
 
-@media screen and (max-width: 768px) {
-  .how-it-works-section h2 {
-    font-size: 2rem;
-  }
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media screen and (max-width: 992px) {
 
   .how-it-works-section .steps {
     flex-direction: column;
-    gap: 30px;
   }
 
-  /* Ocultar la línea en vista móvil */
   .how-it-works-section .steps::before {
     display: none;
   }
+}
+
+@media screen and (max-width: 768px) {
+
+  .how-it-works-section {
+    padding: 90px 20px;
+  }
+
+  .how-it-works-section h2 {
+    font-size: 2.6rem;
+
+    margin-bottom: 60px;
+  }
 
   .how-it-works-section .step {
-    background-color: #f9f9f9; /* Restaurar un fondo ligero en móvil */
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: 35px 25px;
+  }
+
+  .how-it-works-section .step-icon {
+    width: 85px;
+    height: 85px;
+
+    font-size: 2.4rem;
+  }
+
+  .how-it-works-section .step h3 {
+    font-size: 1.4rem;
+  }
+
+  .how-it-works-section .step p {
+    font-size: 0.95rem;
   }
 }

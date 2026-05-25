@@ -1,31 +1,24 @@
 import React, { useState, useContext } from 'react';
+import { Link } from 'react-router-dom';
 import AuthContext from '../../context/AuthContext';
 import './Login.css';
 
 const Login = () => {
   const { login } = useContext(AuthContext);
-  const [formData, setFormData] = useState({
-    correo: '',
-    password: '',
-  });
+  const [formData, setFormData] = useState({ correo: '', password: '' });
   const [error, setError] = useState('');
 
-  const { correo, password } = formData;
-
-  const onChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+  const onChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const onSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    if (!correo || !password) {
+    if (!formData.correo || !formData.password) {
       setError('Por favor, ingrese correo y contraseña.');
       return;
     }
     try {
-      await login(correo, password);
-      // La redirección la maneja el AuthContext
+      await login(formData.correo, formData.password);
     } catch (err) {
       setError(err.response?.data?.msg || 'Error al iniciar sesión. Verifique sus credenciales.');
     }
@@ -33,19 +26,59 @@ const Login = () => {
 
   return (
     <div className="login-container">
-      <h2>Iniciar Sesión</h2>
-      <form onSubmit={onSubmit}>
-        {error && <p className="error-message">{error}</p>}
-        <div className="form-group">
-          <label htmlFor="correo">Correo Electrónico</label>
-          <input type="email" id="correo" name="correo" value={correo} onChange={onChange} required />
+
+      {/* LEFT — Branding */}
+      <div className="login-branding">
+        <span className="brand-logo">SkyShip</span>
+        <h2>Bienvenido de vuelta</h2>
+        <div className="brand-divider" />
+        <p>Accede a tu cuenta para gestionar tus envíos, rastrear paquetes y más.</p>
+      </div>
+
+      {/* RIGHT — Form card */}
+      <div className="login-card">
+        <div className="login-card-header">
+          <h3>Iniciar Sesión</h3>
+          <p>Ingresa tus credenciales para continuar</p>
         </div>
-        <div className="form-group">
-          <label htmlFor="password">Contraseña</label>
-          <input type="password" id="password" name="password" value={password} onChange={onChange} required />
-        </div>
-        <button type="submit" className="btn">Iniciar Sesión</button>
-      </form>
+
+        <form onSubmit={onSubmit} style={{ display: 'contents' }}>
+          {error && <div className="login-error">{error}</div>}
+
+          <div className="login-form-group">
+            <label htmlFor="correo">Correo Electrónico</label>
+            <input
+              type="email"
+              id="correo"
+              name="correo"
+              placeholder="tu@correo.com"
+              value={formData.correo}
+              onChange={onChange}
+              required
+            />
+          </div>
+
+          <div className="login-form-group">
+            <label htmlFor="password">Contraseña</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              placeholder="••••••••"
+              value={formData.password}
+              onChange={onChange}
+              required
+            />
+          </div>
+
+          <button type="submit">Iniciar Sesión</button>
+        </form>
+
+        <p className="login-subtext">
+          ¿No tienes cuenta? <Link to="/registro">Regístrate aquí</Link>
+        </p>
+      </div>
+
     </div>
   );
 };

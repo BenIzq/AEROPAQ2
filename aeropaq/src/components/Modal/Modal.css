@@ -1,33 +1,365 @@
+/* =========================
+   MODAL OVERLAY
+========================= */
+
 .modal-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.6);
+
+  inset: 0;
+
   display: flex;
   justify-content: center;
   align-items: center;
+
+  padding: 20px;
+
   z-index: 1000;
+
+  background: rgba(2,6,23,0.72);
+
+  backdrop-filter: blur(10px);
+
+  animation: fadeOverlay 0.3s ease;
 }
 
+/* =========================
+   MODAL CONTENT
+========================= */
+
 .modal-content {
-  background: white;
-  padding: 2rem;
-  border-radius: 8px;
-  max-width: 500px;
-  width: 90%;
   position: relative;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+
+  overflow: hidden;
+
+  width: 100%;
+  max-width: 560px;
+
+  padding: 45px 40px;
+
+  border-radius: 32px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(15,23,42,0.96),
+      rgba(17,24,39,0.96)
+    );
+
+  border: 1px solid rgba(255,255,255,0.08);
+
+  backdrop-filter: blur(20px);
+
+  box-shadow:
+    0 25px 70px rgba(0,0,0,0.45);
+
+  color: white;
+
+  animation:
+    modalEnter 0.35s ease;
 }
+
+/* glowing background */
+.modal-content::before {
+  content: "";
+
+  position: absolute;
+
+  width: 300px;
+  height: 300px;
+
+  background: rgba(59,130,246,0.15);
+
+  filter: blur(100px);
+
+  top: -120px;
+  right: -120px;
+
+  z-index: 0;
+}
+
+/* subtle overlay */
+.modal-content::after {
+  content: "";
+
+  position: absolute;
+
+  inset: 0;
+
+  background:
+    radial-gradient(circle at top right,
+    rgba(59,130,246,0.12),
+    transparent 35%);
+
+  pointer-events: none;
+}
+
+/* ensure content stays above overlays */
+.modal-content > * {
+  position: relative;
+  z-index: 2;
+}
+
+/* =========================
+   CLOSE BUTTON
+========================= */
 
 .modal-close-btn {
   position: absolute;
-  top: 10px;
-  right: 15px;
-  background: none;
+
+  top: 18px;
+  right: 18px;
+
+  width: 42px;
+  height: 42px;
+
   border: none;
-  font-size: 1.8rem;
+
+  border-radius: 50%;
+
+  background: rgba(255,255,255,0.06);
+
+  border: 1px solid rgba(255,255,255,0.08);
+
+  color: rgba(255,255,255,0.7);
+
+  font-size: 1.5rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
   cursor: pointer;
-  color: #888;
+
+  transition:
+    transform 0.3s ease,
+    background 0.3s ease,
+    color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+/* hover */
+.modal-close-btn:hover {
+  transform: rotate(90deg) scale(1.08);
+
+  background: rgba(239,68,68,0.18);
+
+  color: #f87171;
+
+  box-shadow:
+    0 0 20px rgba(239,68,68,0.25);
+}
+
+/* =========================
+   MODAL TITLES
+========================= */
+
+.modal-content h2,
+.modal-content h3 {
+  font-size: 2rem;
+
+  font-weight: 800;
+
+  margin-bottom: 20px;
+
+  background: linear-gradient(
+    to right,
+    #ffffff,
+    #93c5fd,
+    #60a5fa
+  );
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  letter-spacing: -1px;
+}
+
+/* =========================
+   MODAL TEXT
+========================= */
+
+.modal-content p {
+  color: rgba(255,255,255,0.72);
+
+  line-height: 1.8;
+
+  font-size: 1rem;
+}
+
+/* =========================
+   INPUTS INSIDE MODAL
+========================= */
+
+.modal-content input,
+.modal-content textarea,
+.modal-content select {
+  width: 100%;
+
+  margin-top: 10px;
+
+  padding: 16px 18px;
+
+  border-radius: 16px;
+
+  border: 1px solid rgba(255,255,255,0.08);
+
+  background: rgba(255,255,255,0.05);
+
+  color: white;
+
+  outline: none;
+
+  backdrop-filter: blur(10px);
+
+  transition:
+    border 0.3s ease,
+    box-shadow 0.3s ease,
+    transform 0.3s ease;
+}
+
+/* placeholder */
+.modal-content input::placeholder,
+.modal-content textarea::placeholder {
+  color: rgba(255,255,255,0.4);
+}
+
+/* focus */
+.modal-content input:focus,
+.modal-content textarea:focus,
+.modal-content select:focus {
+  border: 1px solid rgba(59,130,246,0.45);
+
+  box-shadow:
+    0 0 0 4px rgba(59,130,246,0.15),
+    0 0 25px rgba(37,99,235,0.18);
+
+  transform: translateY(-2px);
+}
+
+/* =========================
+   BUTTONS INSIDE MODAL
+========================= */
+
+.modal-content button:not(.modal-close-btn) {
+  position: relative;
+
+  overflow: hidden;
+
+  margin-top: 20px;
+
+  padding: 16px 26px;
+
+  border: none;
+
+  border-radius: 16px;
+
+  background: linear-gradient(
+    135deg,
+    #2563eb,
+    #0ea5e9
+  );
+
+  color: white;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+
+  box-shadow:
+    0 10px 30px rgba(37,99,235,0.35);
+}
+
+/* shine */
+.modal-content button:not(.modal-close-btn)::before {
+  content: "";
+
+  position: absolute;
+
+  top: 0;
+  left: -100%;
+
+  width: 100%;
+  height: 100%;
+
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(255,255,255,0.25),
+    transparent
+  );
+
+  transition: 0.7s ease;
+}
+
+.modal-content button:not(.modal-close-btn):hover::before {
+  left: 100%;
+}
+
+/* hover */
+.modal-content button:not(.modal-close-btn):hover {
+  transform: translateY(-3px);
+
+  box-shadow:
+    0 20px 40px rgba(37,99,235,0.45);
+}
+
+/* =========================
+   ANIMATIONS
+========================= */
+
+@keyframes fadeOverlay {
+
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modalEnter {
+
+  from {
+    opacity: 0;
+    transform: translateY(25px) scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media screen and (max-width: 768px) {
+
+  .modal-content {
+    padding: 35px 25px;
+
+    border-radius: 24px;
+  }
+
+  .modal-content h2,
+  .modal-content h3 {
+    font-size: 1.8rem;
+  }
+
+  .modal-content p {
+    font-size: 0.95rem;
+  }
+
+  .modal-close-btn {
+    width: 38px;
+    height: 38px;
+
+    font-size: 1.3rem;
+  }
 }
