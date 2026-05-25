@@ -1,68 +1,84 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import api from '../../api';
 import './Cotizador.css';
 
 const Cotizador = () => {
   const [datos, setDatos] = useState({
-    origenDestino: 'misma_ciudad',
+    tipoEnvio: 'nacional', // 'nacional' o 'internacional'
+    destinoNacional: 'misma_ciudad',
+    destinoInternacional: '',
     peso: '',
     servicio: 'estandar',
     recoleccion: false,
     seguro: false
   });
 
+  const [destinosInt, setDestinosInt] = useState([]);
   const [resultado, setResultado] = useState(null);
+  const [error, setError] = useState('');
+
+  // Cargar destinos internacionales al montar el componente
+  useEffect(() => {
+    const fetchDestinos = async () => {
+      try {
+        const response = await api.get('/destinos-internacionales');
+        setDestinosInt(response.data);
+      } catch (err) {
+        setError('No se pudieron cargar los destinos internacionales.');
+        console.error(err);
+      }
+    };
+    fetchDestinos();
+  }, []);
 
   const manejarCambio = (e) => {
     const { name, value, type, checked } = e.target;
-    setDatos({
-      ...datos,
+    setDatos(prevDatos => ({
+      ...prevDatos,
       [name]: type === 'checkbox' ? checked : value
-    });
+    }));
   };
 
   const calcularCosto = () => {
     let costoBase = 0;
-    let costoPeso = datos.peso * 2;
-    let costoDistancia = 0;
-    let tiempo = '';
+    const pesoNum = parseFloat(datos.peso) || 0;
 
-    switch (datos.origenDestino) {
-      case 'misma_ciudad':
-        costoBase = 10;
-        costoDistancia = 5;
-        tiempo = '1 - 2 días';
-        break;
-      case 'otro_departamento':
-        costoBase = 20;
-        costoDistancia = 15;
-        tiempo = '2 - 4 días';
-        break;
-      case 'internacional':
-        costoBase = 50;
-        costoDistancia = 40;
-        tiempo = '5 - 10 días';
-        break;
-      default:
-        break;
+    if (pesoNum <= 0) {
+      setResultado(null);
+      return;
     }
 
-    if (datos.servicio === 'express') {
-      costoBase += 15;
-      tiempo = 'Hoy mismo';
+    // 1. Calcular Costo Base
+    if (datos.tipoEnvio === 'nacional') {
+      costoBase = (pesoNum / 4) * 30;
+    } else { // Internacional
+      const destinoSeleccionado = destinosInt.find(d => d.pais === datos.destinoInternacional);
+      if (destinoSeleccionado) {
+        const precioPorKg = parseFloat(destinoSeleccionado.precio_base);
+        costoBase = pesoNum * precioPorKg;
+      }
     }
 
-    let extras = 0;
-    if (datos.recoleccion) extras += 5;
-    if (datos.seguro) extras += 10;
+    // 2. Calcular Extras
+    let costoExtras = 0;
+    if (datos.servicio === 'express') costoExtras += 15;
+    if (datos.recoleccion) costoExtras += 5;
+    if (datos.seguro) costoExtras += 10;
 
-    const total = costoBase + costoPeso + costoDistancia + extras;
+    // 3. Calcular Total
+    const total = costoBase + costoExtras;
 
-    setResultado({ costoBase, costoPeso, costoDistancia, extras, total, tiempo });
+    setResultado({
+      costoBase,
+      costoExtras,
+      total,
+      tiempo: datos.servicio === 'express' ? '' : (datos.tipoEnvio === 'nacional' ? '1-4 días' : '5-10 días')
+    });
   };
 
   return (
     <section id="cotizador" className="cotizador">
-<h2 className="section-title">Cotizador</h2>
+      <h2 className="section-title">Cotizador</h2>
       <div className="cotizador-wrapper">
         <div className="cotizador-image">
           <img src="https://images.pexels.com/photos/5025517/pexels-photo-5025517.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Paquetes y cajas de envío" />
@@ -71,28 +87,46 @@ const Cotizador = () => {
           <div className="formulario">
 
             <div className="field-group">
-              <label className="field-label">Origen / Destino</label>
-              <select name="origenDestino" onChange={manejarCambio}>
-                <option value="misma_ciudad">Misma ciudad</option>
-                <option value="otro_departamento">Otro departamento</option>
+              <label className="field-label">Tipo de Envío</label>
+              <select name="tipoEnvio" value={datos.tipoEnvio} onChange={manejarCambio}>
+                <option value="nacional">Nacional</option>
                 <option value="internacional">Internacional</option>
               </select>
             </div>
 
+            {datos.tipoEnvio === 'nacional' ? (
+              <div className="field-group">
+                <label className="field-label">Origen / Destino</label>
+                <select name="destinoNacional" value={datos.destinoNacional} onChange={manejarCambio}>
+                  <option value="misma_ciudad">Misma ciudad</option>
+                  <option value="otro_departamento">Otro departamento</option>
+                </select>
+              </div>
+            ) : (
+              <div className="field-group">
+                <label className="field-label">País de Destino</label>
+                <select name="destinoInternacional" value={datos.destinoInternacional} onChange={manejarCambio} required>
+                  <option value="">Selecciona un país</option>
+                  {destinosInt.map(d => <option key={d.pais} value={d.pais}>{d.pais}</option>)}
+                </select>
+                {error && <p className="error-text">{error}</p>}
+              </div>
+            )}
+
             <div className="field-group">
-              <label className="field-label">Peso del paquete</label>
+              <label className="field-label">Peso del paquete (kg)</label>
               <input
                 type="number"
                 name="peso"
                 placeholder="Ej: 2.5"
+                value={datos.peso}
                 onChange={manejarCambio}
               />
-              <span className="field-hint">kg / lb</span>
             </div>
 
             <div className="field-group">
               <label className="field-label">Tipo de servicio</label>
-              <select name="servicio" onChange={manejarCambio}>
+              <select name="servicio" value={datos.servicio} onChange={manejarCambio}>
                 <option value="estandar">Estándar</option>
                 <option value="express">Exprés</option>
               </select>
@@ -143,7 +177,7 @@ const Cotizador = () => {
 
             <button
               onClick={calcularCosto}
-              disabled={!datos.peso || datos.peso <= 0}
+              disabled={!datos.peso || datos.peso <= 0 || (datos.tipoEnvio === 'internacional' && !datos.destinoInternacional)}
             >
               Calcular costo
             </button>
@@ -156,31 +190,25 @@ const Cotizador = () => {
               <div className="resultado-rows">
                 <div className="resultado-row">
                   <span>Costo base</span>
-                  <span>Q{resultado.costoBase}</span>
+                  <span>Q{resultado.costoBase.toFixed(2)}</span>
                 </div>
-                <div className="resultado-row">
-                  <span>Por peso</span>
-                  <span>Q{resultado.costoPeso}</span>
-                </div>
-                <div className="resultado-row">
-                  <span>Por distancia</span>
-                  <span>Q{resultado.costoDistancia}</span>
-                </div>
-                {resultado.extras > 0 && (
+                {resultado.costoExtras > 0 && (
                   <div className="resultado-row">
                     <span>Extras</span>
-                    <span>Q{resultado.extras}</span>
+                    <span>Q{resultado.costoExtras.toFixed(2)}</span>
                   </div>
                 )}
               </div>
               <div className="resultado-total">
                 <span>Total estimado</span>
-                <span>Q{resultado.total}</span>
+                <span>Q{resultado.total.toFixed(2)}</span>
               </div>
-              <div className="resultado-tiempo">
-                <span>⏱ Tiempo estimado:</span>
-                <strong>{resultado.tiempo}</strong>
-              </div>
+              {resultado.tiempo && (
+                <div className="resultado-tiempo">
+                  <span>⏱ Tiempo estimado:</span>
+                  <strong>{resultado.tiempo}</strong>
+                </div>
+              )}
             </div>
           )}
         </div>
