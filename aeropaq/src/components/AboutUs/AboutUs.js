@@ -14,7 +14,7 @@ const AboutUs = () => {
   useEffect(() => {
     const fetchInfo = async () => {
       try {
-        const response = await fetch('http://skyship-env.eba-hpyjyiyw.us-east-2.elasticbeanstalk.com/api/informacion-empresa');
+        const response = await fetch('/api/informacion-empresa');
         if (!response.ok) {
           throw new Error('No se pudo obtener la información de la empresa.');
         }

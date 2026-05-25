@@ -49,7 +49,7 @@ const Contact = () => {
       setSubmitMessage('');
 
       try {
-        const response = await fetch('http://skyship-env.eba-hpyjyiyw.us-east-2.elasticbeanstalk.com/api/contactos', {
+        const response = await fetch('/api/contactos', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

@@ -18,7 +18,7 @@ const UserEditForm = ({ user, roles, onUpdate, onClose }) => {
     const onSubmit = async (e) => {
         e.preventDefault();
         try {
-            await api.put(`http://skyship-env.eba-hpyjyiyw.us-east-2.elasticbeanstalk.com/admin/usuarios/${user.id_usuario}`, formData);
+            await api.put(`/admin/usuarios/${user.id_usuario}`, formData);
             onUpdate(formData); // Actualiza el estado en el componente padre
             onClose(); // Cierra el modal
         } catch (err) {
@@ -71,7 +71,7 @@ const UserEditForm = ({ user, roles, onUpdate, onClose }) => {
 const Dashboard = () => {
   const [stats, setStats] = useState(null);
   useEffect(() => {
-    api.get('http://skyship-env.eba-hpyjyiyw.us-east-2.elasticbeanstalk.com/admin/stats').then(res => setStats(res.data)).catch(console.error);
+    api.get('/admin/stats').then(res => setStats(res.data)).catch(console.error);
   }, []);
 
   if (!stats) return <p>Cargando estadísticas...</p>;
@@ -102,8 +102,8 @@ const GestionUsuarios = () => {
         const fetchData = async () => {
             try {
                 const [usersRes, rolesRes] = await Promise.all([
-                    api.get('http://skyship-env.eba-hpyjyiyw.us-east-2.elasticbeanstalk.com/admin/usuarios'),
-                    api.get('http://skyship-env.eba-hpyjyiyw.us-east-2.elasticbeanstalk.com/roles')
+                    api.get('/admin/usuarios'),
+                    api.get('/roles')
                 ]);
                 setUsers(usersRes.data);
                 setRoles(rolesRes.data);
@@ -118,7 +118,7 @@ const GestionUsuarios = () => {
     const handleDeactivate = async (userId) => {
         if (window.confirm('¿Estás seguro de que quieres desactivar a este usuario?')) {
             try {
-                await api.delete(`http://skyship-env.eba-hpyjyiyw.us-east-2.elasticbeanstalk.com/admin/usuarios/${userId}`);
+                await api.delete(`/admin/usuarios/${userId}`);
                 setUsers(prevUsers => 
                     prevUsers.map(user => 
                         user.id_usuario === userId ? { ...user, estado: 'INACTIVO' } : user
@@ -212,8 +212,8 @@ const GestionEnvios = () => {
         const fetchData = async () => {
             try {
                 const [enviosRes, estadosRes] = await Promise.all([
-                    api.get('http://skyship-env.eba-hpyjyiyw.us-east-2.elasticbeanstalk.com/admin/envios'),
-                    api.get('http://skyship-env.eba-hpyjyiyw.us-east-2.elasticbeanstalk.com/estados-envio')
+                    api.get('/admin/envios'),
+                    api.get('/estados-envio')
                 ]);
                 setEnvios(enviosRes.data.map(e => ({...e, id_estado: e.id_estado || estadosRes.data.find(s => s.nombre === e.estado)?.id_estado })));
                 setEstados(estadosRes.data);
@@ -227,7 +227,7 @@ const GestionEnvios = () => {
 
     const handleStatusChange = async (id_envio, new_id_estado) => {
         try {
-            await api.put(`http://skyship-env.eba-hpyjyiyw.us-east-2.elasticbeanstalk.com/admin/envios/${id_envio}`, { id_estado: new_id_estado });
+            await api.put(`/admin/envios/${id_envio}`, { id_estado: new_id_estado });
             setEnvios(prevEnvios => 
                 prevEnvios.map(envio => 
                     envio.id_envio === id_envio 
