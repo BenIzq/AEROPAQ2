@@ -363,3 +363,9 @@
     font-size: 1.3rem;
   }
 }
+
+/* Fix para el color de las opciones del select */
+.modal-content select option {
+  color: black;
+  background: white;
+}
