@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://skyship-env.eba-hpyjyiyw.us-east-2.elasticbeanstalk.com/api',
+  baseURL: 'https://api.skyship.lat/api',
 });
 
 // Interceptor para añadir el token a todas las peticiones
