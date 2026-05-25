@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import api from '../api'; // Importar la instancia de Axios configurada
 
 const AuthContext = createContext();
 
@@ -20,7 +20,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (correo, password) => {
     try {
-      const response = await axios.post('/api/usuarios/login', { correo, password });
+      const response = await api.post('/usuarios/login', { correo, password }); // Usar la instancia 'api'
       const { token, usuario } = response.data;
       
       localStorage.setItem('token', token);
@@ -30,21 +30,20 @@ export const AuthProvider = ({ children }) => {
       
       // Redirigir según el rol
       if (usuario.rol === 'ADMIN') {
-        navigate('/admin'); // Futura ruta de admin
+        navigate('/admin');
       } else {
-        navigate('/mis-envios'); // Futura ruta de cliente
+        navigate('/mis-envios');
       }
     } catch (error) {
       console.error('Error de inicio de sesión:', error);
-      // Lanza el error para que el componente de Login pueda manejarlo
       throw error;
     }
   };
 
   const register = async (userData) => {
     try {
-      await axios.post('/api/usuarios/registro', userData);
-      navigate('/login'); // Redirige a login después de un registro exitoso
+      await api.post('/usuarios/registro', userData); // Usar la instancia 'api'
+      navigate('/login');
     } catch (error) {
       console.error('Error en el registro:', error);
       throw error;
